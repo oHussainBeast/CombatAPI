@@ -1,0 +1,36 @@
+# CombatAPI Configuration
+# Created by HussainBeast
+
+# Combat duration in seconds
+combat-duration: 10
+
+# Action bar settings
+action-bar:
+  enabled: true
+  format: "&c&lCOMBAT &8» &f{time}s"
+  update-frequency: 20
+  batch-size: 50
+
+# Messages
+messages:
+  enter-combat: "&cYou are now in combat!"
+  leave-combat: "&aYou are no longer in combat!"
+  combat-log-killer: "&a{victim} &ccombat logged! You got the kill!"
+  combat-log-broadcast: "&c{victim} &4combat logged and was killed!"
+  
+  # Admin command messages
+  reload-success: "&aCombatAPI configuration reloaded!"
+  duration-set: "&aCombat duration set to {duration} seconds!"
+  actionbar-enabled: "&aAction bar enabled!"
+  actionbar-disabled: "&cAction bar disabled!"
+  no-permission: "&cYou don't have permission to use this command!"
+  invalid-duration: "&cInvalid duration! Please use a number between 1 and 300."
+  
+# Plugin settings
+settings:
+  # Minimum combat duration (seconds)
+  min-duration: 1
+  # Maximum combat duration (seconds)
+  max-duration: 300
+  # Enable debug messages
+  debug: false

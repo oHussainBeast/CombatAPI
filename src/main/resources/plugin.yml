@@ -1,0 +1,21 @@
+name: CombatAPI
+version: 1.0.0
+main: me.hussainbeast.combatapi.CombatAPIPlugin
+author: HussainBeast
+description: Combat Log API for Minecraft plugins
+api-version: 1.8
+
+commands:
+  combatapi:
+    description: CombatAPI main command
+    usage: /combatapi <reload|info|duration|actionbar>
+    permission: combatapi.admin
+    aliases: [capi]
+
+permissions:
+  combatapi.admin:
+    description: Access to CombatAPI admin commands
+    default: op
+  combatapi.bypass:
+    description: Bypass combat log restrictions
+    default: false
