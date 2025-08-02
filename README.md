@@ -71,15 +71,6 @@ permissions:
 
 ## 🛠️ API Usage
 
-### Maven Dependency (Repository)
-```xml
-<dependency>
-    <groupId>me.hussainbeast</groupId>
-    <artifactId>combatapi</artifactId>
-    <version>1.0.0</version>
-    <scope>provided</scope>
-</dependency>
-```
 
 ### Maven Dependency (Local JAR)
 If you prefer to include the JAR file directly in your project:
