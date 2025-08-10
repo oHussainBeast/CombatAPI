@@ -2,6 +2,7 @@
 
 A high-performance, feature-rich Minecraft plugin that provides comprehensive combat logging detection and management for Bukkit/Spigot servers. Built with optimization in mind, CombatAPI offers thread-safe operations, configurable performance settings, and extensive API integration capabilities.
 
+
 ## 🚀 Features
 
 ### Core Functionality
