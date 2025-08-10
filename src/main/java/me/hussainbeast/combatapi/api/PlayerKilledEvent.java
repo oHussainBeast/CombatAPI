@@ -48,6 +48,18 @@ public class PlayerKilledEvent extends Event {
         return combatLog;
     }
     
+    public Player getAttacker() {
+        return killer;
+    }
+    
+    public boolean hasAttacker() {
+        return hasKiller();
+    }
+    
+    public String getKillReason() {
+        return combatLog ? "Combat Log" : "PvP";
+    }
+    
     @Override
     public HandlerList getHandlers() {
         return handlers;
