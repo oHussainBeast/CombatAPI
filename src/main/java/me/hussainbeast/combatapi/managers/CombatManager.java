@@ -14,6 +14,9 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.HashMap;
 
 public class CombatManager {
     
@@ -209,6 +212,48 @@ public class CombatManager {
                 }
             }
         }
+    }
+    
+    public Player getVictim(Player attacker) {
+        UUID attackerUUID = attacker.getUniqueId();
+        for (Map.Entry<UUID, CombatData> entry : combatPlayers.entrySet()) {
+            if (entry.getValue().getAttackerId().equals(attackerUUID)) {
+                return Bukkit.getPlayer(entry.getKey());
+            }
+        }
+        return null;
+    }
+    
+    public Player getVictim(UUID attackerUUID) {
+        for (Map.Entry<UUID, CombatData> entry : combatPlayers.entrySet()) {
+            if (entry.getValue().getAttackerId().equals(attackerUUID)) {
+                return Bukkit.getPlayer(entry.getKey());
+            }
+        }
+        return null;
+    }
+    
+    public Set<Player> getAllPlayersInCombat() {
+        Set<Player> players = new HashSet<>();
+        for (UUID playerId : combatPlayers.keySet()) {
+            Player player = Bukkit.getPlayer(playerId);
+            if (player != null && player.isOnline()) {
+                players.add(player);
+            }
+        }
+        return players;
+    }
+    
+    public Map<Player, Player> getAllCombatPairs() {
+        Map<Player, Player> pairs = new HashMap<>();
+        for (Map.Entry<UUID, CombatData> entry : combatPlayers.entrySet()) {
+            Player victim = Bukkit.getPlayer(entry.getKey());
+            Player attacker = Bukkit.getPlayer(entry.getValue().getAttackerId());
+            if (victim != null && victim.isOnline() && attacker != null && attacker.isOnline()) {
+                pairs.put(victim, attacker);
+            }
+        }
+        return pairs;
     }
     
     private void updateCombatActionBars() {
