@@ -34,4 +34,16 @@ public interface CombatAPI {
     void setActionBarEnabled(boolean enabled);
     
     boolean isActionBarEnabled();
+    
+    Player getAttacker(Player victim);
+    
+    Player getAttacker(UUID victimUUID);
+    
+    Player getVictim(Player attacker);
+    
+    Player getVictim(UUID attackerUUID);
+    
+    java.util.Set<Player> getAllPlayersInCombat();
+    
+    java.util.Map<Player, Player> getAllCombatPairs();
 }
