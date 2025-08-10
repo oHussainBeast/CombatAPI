@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"me.hussainbeast.combatapi"},{"l":"me.hussainbeast.combatapi.api"},{"l":"me.hussainbeast.combatapi.commands"},{"l":"me.hussainbeast.combatapi.examples"},{"l":"me.hussainbeast.combatapi.listeners"},{"l":"me.hussainbeast.combatapi.managers"},{"l":"me.hussainbeast.combatapi.util"}];updateSearchResults();
