@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class CombatListener implements Listener {
@@ -49,4 +50,14 @@ public class CombatListener implements Listener {
             combatManager.handleCombatLog(player);
         }
     }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+
+        if (combatManager.isInCombat(player)) {
+            combatManager.leaveCombat(player);
+        }
+    }
+
 }

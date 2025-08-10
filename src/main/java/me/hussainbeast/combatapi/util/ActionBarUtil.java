@@ -10,10 +10,6 @@ public class ActionBarUtil {
     
     private static String nmsVersion;
     private static Class<?> craftPlayerClass;
-    private static Class<?> packetPlayOutChatClass;
-    private static Class<?> chatComponentTextClass;
-    private static Class<?> iChatBaseComponentClass;
-    private static Class<?> packetClass;
     private static Constructor<?> chatComponentTextConstructor;
     private static Constructor<?> packetPlayOutChatConstructor;
     private static Method getHandleMethod;
@@ -34,10 +30,10 @@ public class ActionBarUtil {
     private static void initializeReflection() {
         try {
             craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + nmsVersion + ".entity.CraftPlayer");
-            packetPlayOutChatClass = Class.forName("net.minecraft.server." + nmsVersion + ".PacketPlayOutChat");
-            chatComponentTextClass = Class.forName("net.minecraft.server." + nmsVersion + ".ChatComponentText");
-            iChatBaseComponentClass = Class.forName("net.minecraft.server." + nmsVersion + ".IChatBaseComponent");
-            packetClass = Class.forName("net.minecraft.server." + nmsVersion + ".Packet");
+            Class<?> packetPlayOutChatClass = Class.forName("net.minecraft.server." + nmsVersion + ".PacketPlayOutChat");
+            Class<?> chatComponentTextClass = Class.forName("net.minecraft.server." + nmsVersion + ".ChatComponentText");
+            Class<?> iChatBaseComponentClass = Class.forName("net.minecraft.server." + nmsVersion + ".IChatBaseComponent");
+            Class<?> packetClass = Class.forName("net.minecraft.server." + nmsVersion + ".Packet");
             
             chatComponentTextConstructor = chatComponentTextClass.getConstructor(String.class);
             packetPlayOutChatConstructor = packetPlayOutChatClass.getConstructor(iChatBaseComponentClass, byte.class);
