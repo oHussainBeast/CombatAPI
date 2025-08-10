@@ -86,4 +86,34 @@ public class CombatAPIImpl implements CombatAPI {
     public boolean isActionBarEnabled() {
         return combatManager.isActionBarEnabled();
     }
+    
+    @Override
+    public Player getAttacker(Player victim) {
+        return combatManager.getLastAttacker(victim);
+    }
+    
+    @Override
+    public Player getAttacker(UUID victimUUID) {
+        return combatManager.getLastAttacker(victimUUID);
+    }
+    
+    @Override
+    public Player getVictim(Player attacker) {
+        return combatManager.getVictim(attacker);
+    }
+    
+    @Override
+    public Player getVictim(UUID attackerUUID) {
+        return combatManager.getVictim(attackerUUID);
+    }
+    
+    @Override
+    public java.util.Set<Player> getAllPlayersInCombat() {
+        return combatManager.getAllPlayersInCombat();
+    }
+    
+    @Override
+    public java.util.Map<Player, Player> getAllCombatPairs() {
+        return combatManager.getAllCombatPairs();
+    }
 }
