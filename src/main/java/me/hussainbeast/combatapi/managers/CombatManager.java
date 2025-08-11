@@ -36,6 +36,9 @@ public class CombatManager {
         this.actionBarUpdateFrequency = plugin.getConfig().getInt("action-bar.update-frequency", 20);
         this.batchSize = plugin.getConfig().getInt("action-bar.batch-size", 50);
         
+        plugin.getLogger().info("CombatManager initialized - Action Bar Enabled: " + actionBarEnabled);
+        plugin.getLogger().info("Combat Duration: " + combatDuration + "s, Update Frequency: " + actionBarUpdateFrequency + " ticks");
+        
         startActionBarTask();
     }
     
@@ -44,14 +47,19 @@ public class CombatManager {
             actionBarTask.cancel();
         }
         
-        actionBarTask = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (actionBarEnabled) {
-                    updateCombatActionBars();
+        if (actionBarEnabled) {
+            plugin.getLogger().info("Starting action bar task with frequency: " + actionBarUpdateFrequency + " ticks");
+            actionBarTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Bukkit.getScheduler().runTask(plugin, () -> {
+                        updateCombatActionBars();
+                    });
                 }
-            }
-        }.runTaskTimerAsynchronously(plugin, 0L, actionBarUpdateFrequency);
+            }.runTaskTimerAsynchronously(plugin, 0L, actionBarUpdateFrequency);
+        } else {
+            plugin.getLogger().info("Action bar is disabled, not starting task");
+        }
     }
     
     public void enterCombat(Player player, Player attacker) {
@@ -201,10 +209,14 @@ public class CombatManager {
         plugin.getConfig().set("action-bar.enabled", enabled);
         plugin.saveConfig();
         
+        if (actionBarTask != null) {
+            actionBarTask.cancel();
+            actionBarTask = null;
+        }
+        
         if (enabled) {
             startActionBarTask();
-        } else if (actionBarTask != null) {
-            actionBarTask.cancel();
+        } else {
             for (UUID playerId : combatPlayers.keySet()) {
                 Player player = Bukkit.getPlayer(playerId);
                 if (player != null && player.isOnline()) {
