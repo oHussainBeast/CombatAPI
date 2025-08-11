@@ -1,171 +1,425 @@
-# CombatAPI
+<div align="center">
 
-A comprehensive Combat Log API for Minecraft plugins that provides easy access to combat information including attackers and victims.
+# ⚔️ CombatAPI
 
-## Features
+**A powerful and lightweight Combat Log API for Minecraft plugins**
 
-- Track players in combat with their attackers
-- Get combat time remaining for players
-- Handle combat logging events
-- Retrieve all players currently in combat
-- Get combat pairs (victim -> attacker mapping)
-- Configurable combat duration and action bar messages
-- Easy to shade into other plugins
+[![Java](https://img.shields.io/badge/Java-17+-orange.svg)](https://www.oracle.com/java/)
+[![Minecraft](https://img.shields.io/badge/Minecraft-1.8+-green.svg)](https://www.minecraft.net/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)](#)
 
-## API Usage
+*Track player combat states with ease and precision*
 
-### Getting the API Instance
+[Features](#-features) • [Quick Start](#-quick-start) • [API Reference](#-api-reference) • [Configuration](#-configuration)
+
+</div>
+
+---
+
+## ✨ Features
+
+- 🎯 **Combat Tracking** - Monitor players in combat with their attackers
+- ⏱️ **Time Management** - Get precise combat time remaining
+- 🚪 **Combat Logging** - Handle player disconnections during combat
+- 👥 **Bulk Operations** - Retrieve all combat players and pairs
+- 🎨 **Action Bar Support** - Real-time combat status display
+- ⚡ **High Performance** - Asynchronous updates with thread safety
+- 🔧 **Configurable** - Customizable duration and messages
+- 📦 **Easy Integration** - Simple shading into other plugins
+
+## 🚀 Quick Start
+
+### Installation
+
+1. Download the latest release from [Releases](../../releases)
+2. Place the JAR file in your `plugins` folder
+3. Restart your server
+4. Configure the plugin in `config.yml`
+
+### Basic Usage
 
 ```java
 import me.hussainbeast.combatapi.api.CombatAPI;
 import me.hussainbeast.combatapi.api.CombatAPIProvider;
 
-// Check if CombatAPI is available
-if (CombatAPIProvider.isAvailable()) {
-    CombatAPI api = CombatAPIProvider.getAPI();
+// Get the API instance
+CombatAPI api = CombatAPIProvider.getAPI();
+
+// Put a player in combat
+api.enterCombat(victim, attacker);
+
+// Check if player is in combat
+if (api.isInCombat(player)) {
+    long timeLeft = api.getCombatTimeRemaining(player);
+    player.sendMessage("Combat ends in " + timeLeft + " seconds!");
 }
 ```
 
-### Main API Methods
+## 📚 API Reference
+
+### Core Methods
+
+<details>
+<summary><strong>🎯 Combat State Management</strong></summary>
+
+#### `enterCombat(Player victim, Player attacker)`
+Puts a player into combat with a specific attacker.
 
 ```java
-// Check if player is in combat
-boolean inCombat = api.isInCombat(player);
-
-// Get the attacker of a victim
-Player attacker = api.getAttacker(victim);
-
-// Get the victim of an attacker
-Player victim = api.getVictim(attacker);
-
-// Get all players currently in combat
-Set<Player> playersInCombat = api.getAllPlayersInCombat();
-
-// Get all combat pairs (victim -> attacker)
-Map<Player, Player> combatPairs = api.getAllCombatPairs();
-
-// Get remaining combat time
-long timeRemaining = api.getCombatTimeRemaining(player);
-
-// Manually enter/leave combat
 api.enterCombat(victim, attacker);
+```
+
+**Features:**
+- Cancels existing combat timers
+- Creates new combat timer with configured duration
+- Sends combat enter message
+- Stores attacker information and start time
+
+#### `leaveCombat(Player player)`
+Removes a player from combat immediately.
+
+```java
 api.leaveCombat(player);
 ```
 
-### Listening to Combat Events
+**Features:**
+- Cancels combat timer
+- Sends combat leave message
+- Clears action bar display
+- Removes combat data
+
+#### `clearCombat(Player player)`
+Alias for `leaveCombat()` - provides alternative method name.
+
+#### `clearAllCombat()`
+Removes all players from combat and clears all data.
 
 ```java
-import me.hussainbeast.combatapi.api.PlayerKilledEvent;
+api.clearAllCombat(); // Useful for server restart
+```
 
+</details>
+
+<details>
+<summary><strong>🔍 Combat Status Checking</strong></summary>
+
+#### `isInCombat(Player player)`
+Checks if a player is currently in combat.
+
+```java
+if (api.isInCombat(player)) {
+    player.sendMessage("You are in combat!");
+}
+```
+
+#### `isInCombat(UUID playerUUID)`
+UUID-based version for checking combat status.
+
+```java
+boolean inCombat = api.isInCombat(playerUUID);
+```
+
+</details>
+
+<details>
+<summary><strong>👥 Player Relationships</strong></summary>
+
+#### `getLastAttacker(Player player)` / `getAttacker(Player victim)`
+Returns who last attacked the specified player.
+
+```java
+Player attacker = api.getAttacker(victim);
+if (attacker != null) {
+    victim.sendMessage("You were attacked by " + attacker.getName());
+}
+```
+
+#### `getVictim(Player attacker)`
+Returns who the attacker is currently fighting.
+
+```java
+Player victim = api.getVictim(attacker);
+if (victim != null) {
+    attacker.sendMessage("You are fighting " + victim.getName());
+}
+```
+
+**Note:** All methods have UUID-based variants for when you only have player UUIDs.
+
+</details>
+
+<details>
+<summary><strong>⏱️ Time Management</strong></summary>
+
+#### `getCombatTimeRemaining(Player player)`
+Returns remaining combat time in seconds.
+
+```java
+long timeLeft = api.getCombatTimeRemaining(player);
+player.sendMessage("Combat ends in " + timeLeft + " seconds");
+```
+
+#### `getCombatDuration()` / `setCombatDuration(int seconds)`
+Get or set the global combat duration.
+
+```java
+int duration = api.getCombatDuration(); // Get current duration
+api.setCombatDuration(15); // Set to 15 seconds
+```
+
+**Note:** Setting duration updates config file and affects all future combat entries.
+
+</details>
+
+<details>
+<summary><strong>🎨 Action Bar Management</strong></summary>
+
+#### `isActionBarEnabled()` / `setActionBarEnabled(boolean enabled)`
+Manage action bar display for combat timers.
+
+```java
+if (api.isActionBarEnabled()) {
+    // Action bars are showing combat timers
+}
+
+api.setActionBarEnabled(false); // Disable action bars
+```
+
+**Features:**
+- Shows real-time combat countdown
+- Asynchronous updates for performance
+- Automatic cleanup when disabled
+
+</details>
+
+<details>
+<summary><strong>📊 Bulk Operations</strong></summary>
+
+#### `getAllPlayersInCombat()`
+Get all players currently in combat.
+
+```java
+Set<Player> combatPlayers = api.getAllPlayersInCombat();
+Bukkit.broadcastMessage(combatPlayers.size() + " players in combat!");
+```
+
+#### `getAllCombatPairs()`
+Get all victim → attacker relationships.
+
+```java
+Map<Player, Player> pairs = api.getAllCombatPairs();
+for (Map.Entry<Player, Player> entry : pairs.entrySet()) {
+    Player victim = entry.getKey();
+    Player attacker = entry.getValue();
+    // Process combat pair
+}
+```
+
+</details>
+
+<details>
+<summary><strong>🚪 Combat Logging</strong></summary>
+
+#### `handleCombatLog(Player player)`
+Handles player disconnection during combat.
+
+```java
+// Automatically called when player leaves during combat
+api.handleCombatLog(player);
+```
+
+**Features:**
+- Fires `PlayerKilledEvent` with combat log flag
+- Removes player from combat
+- Customizable punishment system
+
+</details>
+
+---
+
+## 🎭 Events
+
+### PlayerKilledEvent
+
+Fired when a player is killed in combat or logs out during combat.
+
+```java
 @EventHandler
 public void onPlayerKilled(PlayerKilledEvent event) {
     Player victim = event.getVictim();
-    Player attacker = event.getAttacker();
+    Player killer = event.getKiller();
     
     if (event.isCombatLog()) {
-        // Player was killed by combat logging
-    } else {
-        // Player was killed in normal PvP
+        // Handle combat logging
+        Bukkit.broadcastMessage(victim.getName() + " combat logged!");
+    } else if (killer != null) {
+        // Handle normal PvP kill
+        killer.sendMessage("You killed " + victim.getName() + "!");
     }
 }
 ```
 
-## Shading into Your Plugin
+**Available Methods:**
+- `getVictim()` - The killed player
+- `getKiller()` / `getAttacker()` - The killer (may be null)
+- `hasKiller()` / `hasAttacker()` - Check if killer exists
+- `isCombatLog()` - Check if death was from combat logging
+- `getKillReason()` - Get the reason for the kill
 
-To use CombatAPI in your plugin, add this to your `pom.xml`:
+---
 
-### 1. Add Repository
-
-```xml
-<repositories>
-    <repository>
-        <id>local-repo</id>
-        <url>file://${project.basedir}/libs</url>
-    </repository>
-</repositories>
-```
-
-### 2. Add Dependency
-
-```xml
-<dependencies>
-    <dependency>
-        <groupId>me.hussainbeast</groupId>
-        <artifactId>combatapi</artifactId>
-        <version>1.0.0</version>
-        <scope>compile</scope>
-    </dependency>
-</dependencies>
-```
-
-### 3. Configure Shade Plugin
-
-```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>3.2.4</version>
-            <executions>
-                <execution>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>shade</goal>
-                    </goals>
-                    <configuration>
-                        <createDependencyReducedPom>false</createDependencyReducedPom>
-                        <artifactSet>
-                            <includes>
-                                <include>me.hussainbeast:combatapi</include>
-                            </includes>
-                        </artifactSet>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
-</build>
-```
-
-### 4. Add Dependency in plugin.yml
+## ⚙️ Configuration
 
 ```yaml
-depend: [CombatAPI]
-# or
-soft-depend: [CombatAPI]
-```
+# Combat duration in seconds
+combat-duration: 10
 
-## Configuration
-
-The plugin comes with a configurable `config.yml`:
-
-```yaml
-combat-duration: 10  # Combat duration in seconds
-
+# Action bar settings
 action-bar:
   enabled: true
-  format: "&c&lCOMBAT &8» &f{time}s"
-  update-frequency: 20  # Update frequency in ticks
-  batch-size: 50  # Players processed per batch
+  update-frequency: 20  # Ticks (20 = 1 second)
+  batch-size: 50       # Players processed per batch
 
+# Combat messages
 messages:
-  combat-log-killer: "&a{victim} &ccombat logged! You got the kill!"
-  combat-log-broadcast: "&c{victim} &4combat logged and was killed!"
+  enter-combat: "&cYou are now in combat!"
+  leave-combat: "&aYou are no longer in combat."
+  combat-log: "&c{victim} combat logged and was killed by {attacker}!"
+  action-bar: "&cCombat: &f{time}s"
 ```
 
-## Building
+### Configuration Options
 
-1. Clone the repository
-2. Run `mvn clean package`
-3. The compiled JAR will be in the `target/` directory
+| Option | Default | Description |
+|--------|---------|-------------|
+| `combat-duration` | `10` | How long combat lasts (seconds) |
+| `action-bar.enabled` | `true` | Show combat timer in action bar |
+| `action-bar.update-frequency` | `20` | Update interval in ticks |
+| `action-bar.batch-size` | `50` | Players processed per update |
 
-## Requirements
+---
 
-- Java 8+
-- Spigot/Paper 1.8.8+
-- Maven for building
+## 🔧 Commands & Permissions
 
-## License
+| Command | Permission | Description |
+|---------|------------|-------------|
+| `/combatapi reload` | `combatapi.reload` | Reload configuration |
+| `/combatapi clear [player]` | `combatapi.clear` | Clear combat for player/all |
+| `/combatapi status [player]` | `combatapi.status` | Check combat status |
+---
 
-This project is open source and available under the MIT License.
+## 🚀 Installation
+
+### For Server Owners
+
+1. **Download** the latest release from [Releases](../../releases)
+2. **Place** the JAR file in your `plugins/` folder
+3. **Restart** your server
+4. **Configure** the plugin in `plugins/CombatAPI/config.yml`
+
+### For Developers
+
+#### Maven Dependency
+
+```xml
+<dependency>
+    <groupId>me.hussainbeast</groupId>
+    <artifactId>combatapi</artifactId>
+    <version>1.0.0</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+#### Gradle Dependency
+
+```gradle
+dependencies {
+    compileOnly 'me.hussainbeast:combatapi:1.0.0'
+}
+```
+
+#### Shading (Optional)
+
+To include CombatAPI directly in your plugin:
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-shade-plugin</artifactId>
+    <version>3.2.4</version>
+    <executions>
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>shade</goal>
+            </goals>
+            <configuration>
+                <relocations>
+                    <relocation>
+                        <pattern>me.hussainbeast.combatapi</pattern>
+                        <shadedPattern>your.package.combatapi</shadedPattern>
+                    </relocation>
+                </relocations>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+```
+
+---
+
+## 🔨 Building
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/CombatAPI.git
+cd CombatAPI
+
+# Build with Maven
+mvn clean package
+
+# The compiled JAR will be in target/
+```
+
+**Requirements:**
+- Java 17+
+- Maven 3.6+
+- Spigot/Paper 1.8+
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. **Fork** the repository
+2. **Create** your feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 💡 Support
+
+- 📖 **Documentation**: Check this README and inline code comments
+- 🐛 **Bug Reports**: [Open an issue](../../issues/new?template=bug_report.md)
+- 💡 **Feature Requests**: [Open an issue](../../issues/new?template=feature_request.md)
+- 💬 **Discord**: [Join our community](https://discord.gg/your-server)
+
+---
+
+<div align="center">
+
+**Made with ❤️ for the Minecraft community**
+
+⭐ **Star this repo if you found it helpful!** ⭐
+
+</div>
