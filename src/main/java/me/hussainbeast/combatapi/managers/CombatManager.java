@@ -185,8 +185,12 @@ public class CombatManager {
         }
         combatPlayers.clear();
         
-        if (actionBarTask != null) {
-            actionBarTask.cancel();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (actionBarEnabled) {
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    ActionBarUtil.sendActionBar(player, "");
+                });
+            }
         }
     }
     
