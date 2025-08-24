@@ -55,10 +55,18 @@ public class CombatAPICommand implements CommandExecutor, TabCompleter {
     }
     
     private void handleReload(CommandSender sender) {
-        plugin.reloadConfig();
-        plugin.getCombatManager().setCombatDuration(plugin.getConfig().getInt("combat-duration", 10));
-        plugin.getCombatManager().setActionBarEnabled(plugin.getConfig().getBoolean("action-bar.enabled", true));
-        sender.sendMessage(color(plugin.getConfig().getString("messages.reload-success", "&aCombatAPI configuration reloaded!")));
+        sender.sendMessage(color("&eReloading configuration..."));
+        
+        plugin.getConfigManager().reloadConfigurationAsync().thenAccept(success -> {
+            if (success) {
+                sender.sendMessage(color("&aConfiguration reloaded successfully!"));
+            } else {
+                sender.sendMessage(color("&cConfiguration reloaded with some issues. Check console for details."));
+            }
+        }).exceptionally(throwable -> {
+            sender.sendMessage(color("&cFailed to reload configuration: " + throwable.getMessage()));
+            return null;
+        });
     }
     
     private void handleInfo(CommandSender sender) {
