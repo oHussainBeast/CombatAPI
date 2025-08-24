@@ -34,3 +34,25 @@ settings:
   max-duration: 300
   # Enable debug messages
   debug: false
+  
+  # Logging settings
+  log-level: "INFO"  # DEBUG, INFO, WARN, ERROR, FATAL
+  file-logging: false
+  console-logging: true
+  
+  # Error handling settings
+  max-retries: 3
+  retry-delay-ms: 1000
+  enable-recovery-mechanisms: true
+  
+  # Performance monitoring
+  enable-metrics: true
+  metrics-interval: 300  # seconds
+  
+  # Validation settings
+  strict-validation: true
+  validate-player-state: true
+  
+  # Async API settings
+  async-threads: 4
+  async-timeout-seconds: 30
