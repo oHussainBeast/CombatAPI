@@ -1,34 +1,32 @@
 <div align="center">
 
-# ⚔️ CombatAPI
+# CombatAPI
 
-**A powerful and lightweight Combat Log API for Minecraft plugins**
+A lightweight Combat Log API for Minecraft plugins
 
 [![Java](https://img.shields.io/badge/Java-17+-orange.svg)](https://www.oracle.com/java/)
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.8+-green.svg)](https://www.minecraft.net/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)](#)
 
-*Track player combat states with ease and precision*
-
-[Features](#-features) • [Quick Start](#-quick-start) • [API Reference](#-api-reference) • [Configuration](#-configuration)
+[Features](#features) • [Quick Start](#quick-start) • [API Reference](#api-reference) • [Configuration](#configuration)
 
 </div>
 
 ---
 
-## ✨ Features
+## Features
 
-- 🎯 **Combat Tracking** - Monitor players in combat with their attackers
-- ⏱️ **Time Management** - Get precise combat time remaining
-- 🚪 **Combat Logging** - Handle player disconnections during combat
-- 👥 **Bulk Operations** - Retrieve all combat players and pairs
-- 🎨 **Action Bar Support** - Real-time combat status display
-- ⚡ **High Performance** - Asynchronous updates with thread safety
-- 🔧 **Configurable** - Customizable duration and messages
-- 📦 **Easy Integration** - Simple shading into other plugins
+- Combat Tracking - Monitor players in combat with their attackers
+- Time Management - Get precise combat time remaining
+- Combat Logging - Handle player disconnections during combat
+- Bulk Operations - Retrieve all combat players and pairs
+- Action Bar Support - Real-time combat status display
+- High Performance - Asynchronous updates with thread safety
+- Configurable - Customizable duration and messages
+- Easy Integration - Simple shading into other plugins
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -56,12 +54,12 @@ if (api.isInCombat(player)) {
 }
 ```
 
-## 📚 API Reference
+## API Reference
 
 ### Core Methods
 
 <details>
-<summary><strong>🎯 Combat State Management</strong></summary>
+<summary><strong>Combat State Management</strong></summary>
 
 #### `enterCombat(Player victim, Player attacker)`
 Puts a player into combat with a specific attacker.
@@ -70,7 +68,7 @@ Puts a player into combat with a specific attacker.
 api.enterCombat(victim, attacker);
 ```
 
-**Features:**
+What it does:
 - Cancels existing combat timers
 - Creates new combat timer with configured duration
 - Sends combat enter message
@@ -83,7 +81,7 @@ Removes a player from combat immediately.
 api.leaveCombat(player);
 ```
 
-**Features:**
+What it does:
 - Cancels combat timer
 - Sends combat leave message
 - Clears action bar display
@@ -102,7 +100,7 @@ api.clearAllCombat(); // Useful for server restart
 </details>
 
 <details>
-<summary><strong>🔍 Combat Status Checking</strong></summary>
+<summary><strong>Combat Status Checking</strong></summary>
 
 #### `isInCombat(Player player)`
 Checks if a player is currently in combat.
@@ -123,7 +121,7 @@ boolean inCombat = api.isInCombat(playerUUID);
 </details>
 
 <details>
-<summary><strong>👥 Player Relationships</strong></summary>
+<summary><strong>Player Relationships</strong></summary>
 
 #### `getLastAttacker(Player player)` / `getAttacker(Player victim)`
 Returns who last attacked the specified player.
@@ -145,12 +143,12 @@ if (victim != null) {
 }
 ```
 
-**Note:** All methods have UUID-based variants for when you only have player UUIDs.
+Note: All methods have UUID-based variants for when you only have player UUIDs.
 
 </details>
 
 <details>
-<summary><strong>⏱️ Time Management</strong></summary>
+<summary><strong>Time Management</strong></summary>
 
 #### `getCombatTimeRemaining(Player player)`
 Returns remaining combat time in seconds.
@@ -168,12 +166,12 @@ int duration = api.getCombatDuration(); // Get current duration
 api.setCombatDuration(15); // Set to 15 seconds
 ```
 
-**Note:** Setting duration updates config file and affects all future combat entries.
+Note: Setting duration updates config file and affects all future combat entries.
 
 </details>
 
 <details>
-<summary><strong>🎨 Action Bar Management</strong></summary>
+<summary><strong>Action Bar Management</strong></summary>
 
 #### `isActionBarEnabled()` / `setActionBarEnabled(boolean enabled)`
 Manage action bar display for combat timers.
@@ -186,7 +184,7 @@ if (api.isActionBarEnabled()) {
 api.setActionBarEnabled(false); // Disable action bars
 ```
 
-**Features:**
+What it does:
 - Shows real-time combat countdown
 - Asynchronous updates for performance
 - Automatic cleanup when disabled
@@ -194,7 +192,7 @@ api.setActionBarEnabled(false); // Disable action bars
 </details>
 
 <details>
-<summary><strong>📊 Bulk Operations</strong></summary>
+<summary><strong>Bulk Operations</strong></summary>
 
 #### `getAllPlayersInCombat()`
 Get all players currently in combat.
@@ -205,7 +203,7 @@ Bukkit.broadcastMessage(combatPlayers.size() + " players in combat!");
 ```
 
 #### `getAllCombatPairs()`
-Get all victim → attacker relationships.
+Get all victim to attacker relationships.
 
 ```java
 Map<Player, Player> pairs = api.getAllCombatPairs();
@@ -219,7 +217,7 @@ for (Map.Entry<Player, Player> entry : pairs.entrySet()) {
 </details>
 
 <details>
-<summary><strong>🚪 Combat Logging</strong></summary>
+<summary><strong>Combat Logging</strong></summary>
 
 #### `handleCombatLog(Player player)`
 Handles player disconnection during combat.
@@ -229,7 +227,7 @@ Handles player disconnection during combat.
 api.handleCombatLog(player);
 ```
 
-**Features:**
+What it does:
 - Fires `PlayerKilledEvent` with combat log flag
 - Removes player from combat
 - Customizable punishment system
@@ -238,7 +236,7 @@ api.handleCombatLog(player);
 
 ---
 
-## 🎭 Events
+## Events
 
 ### PlayerKilledEvent
 
@@ -260,7 +258,7 @@ public void onPlayerKilled(PlayerKilledEvent event) {
 }
 ```
 
-**Available Methods:**
+Available Methods:
 - `getVictim()` - The killed player
 - `getKiller()` / `getAttacker()` - The killer (may be null)
 - `hasKiller()` / `hasAttacker()` - Check if killer exists
@@ -269,7 +267,7 @@ public void onPlayerKilled(PlayerKilledEvent event) {
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ```yaml
 # Combat duration in seconds
@@ -300,23 +298,24 @@ messages:
 
 ---
 
-## 🔧 Commands & Permissions
+## Commands & Permissions
 
 | Command | Permission | Description |
 |---------|------------|-------------|
 | `/combatapi reload` | `combatapi.reload` | Reload configuration |
 | `/combatapi clear [player]` | `combatapi.clear` | Clear combat for player/all |
 | `/combatapi status [player]` | `combatapi.status` | Check combat status |
+
 ---
 
-## 🚀 Installation
+## Installation
 
 ### For Server Owners
 
-1. **Download** the latest release from [Releases](../../releases)
-2. **Place** the JAR file in your `plugins/` folder
-3. **Restart** your server
-4. **Configure** the plugin in `plugins/CombatAPI/config.yml`
+1. Download the latest release from [Releases](../../releases)
+2. Place the JAR file in your `plugins/` folder
+3. Restart your server
+4. Configure the plugin in `plugins/CombatAPI/config.yml`
 
 ### For Developers
 
@@ -369,7 +368,7 @@ To include CombatAPI directly in your plugin:
 
 ---
 
-## 🔨 Building
+## Building
 
 ```bash
 # Clone the repository
@@ -382,44 +381,34 @@ mvn clean package
 # The compiled JAR will be in target/
 ```
 
-**Requirements:**
+Requirements:
 - Java 17+
 - Maven 3.6+
 - Spigot/Paper 1.8+
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Feel free to submit a Pull Request.
 
-1. **Fork** the repository
-2. **Create** your feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. **Open** a Pull Request
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 💡 Support
+## Support
 
-- 📖 **Documentation**: Check this README and inline code comments
-- 🐛 **Bug Reports**: [Open an issue](../../issues/new?template=bug_report.md)
-- 💡 **Feature Requests**: [Open an issue](../../issues/new?template=feature_request.md)
-- 💬 **Discord**: [Join our community](https://discord.gg/your-server)
-
----
-
-<div align="center">
-
-**Made with ❤️ for the Minecraft community**
-
-⭐ **Star this repo if you found it helpful!** ⭐
-
-</div>
+- Documentation: Check this README and inline code comments
+- Bug Reports: [Open an issue](../../issues/new?template=bug_report.md)
+- Feature Requests: [Open an issue](../../issues/new?template=feature_request.md)
+- Discord: [Join our community](https://discord.gg/your-server)
