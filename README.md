@@ -372,7 +372,7 @@ To include CombatAPI directly in your plugin:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/CombatAPI.git
+git clone https://github.com/minetraxstudio/CombatAPI.git
 cd CombatAPI
 
 # Build with Maven
@@ -392,23 +392,4 @@ Requirements:
 
 Contributions are welcome! Feel free to submit a Pull Request.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ---
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## Support
-
-- Documentation: Check this README and inline code comments
-- Bug Reports: [Open an issue](../../issues/new?template=bug_report.md)
-- Feature Requests: [Open an issue](../../issues/new?template=feature_request.md)
-- Discord: [Join our community](https://discord.gg/your-server)
