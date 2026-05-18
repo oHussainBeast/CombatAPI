@@ -372,7 +372,7 @@ To include CombatAPI directly in your plugin:
 
 ```bash
 # Clone the repository
-git clone https://github.com/minetraxstudio/CombatAPI.git
+git clone https://github.com/oHussainBeast/CombatAPI.git
 cd CombatAPI
 
 # Build with Maven
